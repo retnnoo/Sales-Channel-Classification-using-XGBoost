@@ -7,127 +7,111 @@
 ![Machine Learning](https://img.shields.io/badge/Model-Classification-green?style=for-the-badge)
 ![Dataset](https://img.shields.io/badge/Dataset-Kaggle-blue?style=for-the-badge&logo=kaggle)
 
----
 
 # 🎯 Business Overview
 
-Dalam ekosistem ritel modern, memahami apakah pelanggan lebih memilih belanja **Online**, **Offline**, atau **Hybrid** merupakan kunci untuk meningkatkan efisiensi strategi pemasaran.
+In the modern retail ecosystem, understanding whether customers prefer **Online**, **Offline**, or **Hybrid** shopping channels is essential for improving marketing efficiency and customer engagement. This project builds a **multi-class classification model** to predict customer shopping channel preferences using digital behavior data and demographic characteristics.
 
-Proyek ini membangun model **klasifikasi multi-kelas** untuk memprediksi preferensi saluran belanja pelanggan menggunakan data perilaku digital dan karakteristik demografi pelanggan.
+With this model, retail companies can:
 
-Dengan model ini, perusahaan ritel dapat:
+- Optimize marketing strategies based on customer preferences  
+- Allocate promotions more effectively between online and offline channels  
+- Better understand customer behavior in an **omnichannel retail ecosystem**
 
-- Mengoptimalkan strategi pemasaran berbasis preferensi pelanggan
-- Mengalokasikan promosi secara lebih efektif antara online dan offline
-- Memahami perilaku pelanggan dalam ekosistem **omnichannel retail**
 
----
 
 # 📊 Dataset
 
-**Sumber dataset:**  
+**Dataset source:**  
 https://www.kaggle.com/datasets/shree0910/online-vs-in-store-shopping-behaviour-dataset
 
-Target variabel dalam proyek ini adalah:
-
+The target variable in this project is:
 **shopping_preference**
 
-- Store
-- Online
-- Hybrid
+- **Store** → customers primarily shop in physical stores  
+- **Online** → customers primarily shop through online platforms  
+- **Hybrid** → customers use both online and offline shopping channels  
 
-Dataset terdiri dari **11.789 pelanggan** dengan berbagai fitur yang menggambarkan perilaku belanja, aktivitas digital, serta preferensi interaksi dengan produk.
+The dataset contains **11,789 customers** with multiple features describing shopping behavior, digital activity, and product interaction preferences.
 
-**Distribusi Label**
+## Label Distribution
 
-<p align="center">
-  <img src="images/label_distribution.png" width="600">
-</p>
+![Distribution of Labels](img/distribution.png)
 
-Distribusi label menunjukkan bahwa kelas **Store** mendominasi dataset dibandingkan kelas **Online** dan **Hybrid**.  
-Ketidakseimbangan distribusi ini menjadi salah satu tantangan dalam proses pemodelan karena model berpotensi lebih bias terhadap kelas mayoritas.
+The label distribution shows that the **Store class dominates the dataset**, compared to **Online** and **Hybrid** classes. This imbalance presents a challenge during modeling because the algorithm may become biased toward the majority class.
 
-Oleh karena itu, pada tahap modeling digunakan strategi penanganan **class imbalance** untuk meningkatkan kemampuan model dalam mengenali kelas minoritas.
 
----
 
-# 🤖 Model Machine Learning
+# 🤖 Machine Learning Model
 
-Model yang digunakan dalam proyek ini adalah **XGBoost Classifier**, sebuah algoritma berbasis **Gradient Boosting** yang terkenal memiliki performa tinggi dalam tugas klasifikasi.
+The model used in this project is **XGBoost Classifier**, a **Gradient Boosting-based algorithm** well known for its strong performance in classification tasks.
 
-### Strategi Pemodelan
+### Modeling Strategy
 
-- **Algoritma utama:** XGBoost Classifier
-- **Penanganan Imbalanced Data:** `compute_class_weight`
-- **Hyperparameter Optimization:** `RandomizedSearchCV`
-- **Metode evaluasi utama:** **F1-Score**
+- **Primary Algorithm:** XGBoost Classifier  
+- **Imbalanced Data Handling:** `compute_class_weight`  
+- **Hyperparameter Optimization:** `RandomizedSearchCV`  
+- **Main Evaluation Metric:** **F1-Score**
 
-Pendekatan ini digunakan untuk memastikan model tidak hanya memiliki akurasi tinggi, tetapi juga mampu menangani distribusi kelas yang tidak seimbang.
+This approach ensures that the model not only achieves high accuracy but also performs well across imbalanced classes.
 
----
+
 
 # 📊 Model Evaluation
 
-Performa model dievaluasi menggunakan **classification report** dan **confusion matrix**.
+Model performance was evaluated using a **classification report** and **confusion matrix**.
 
-<p align="center">
-  <img src="images/confusion_matrix.png" width="600">
-</p>
+![Confution Matrix](img/confusion_matrix.png)
 
-## Akurasi Model
 
-**96%**
+**Model Accuracy 96%**
 
 ## Classification Report
 
-| Kelas | Precision | Recall | F1-score |
+| Class | Precision | Recall | F1-score |
 |------|------|------|------|
 | Store | 0.99 | 0.98 | 0.99 |
 | Online | 0.91 | 0.93 | 0.92 |
 | Hybrid | 0.41 | 0.51 | 0.46 |
 
-### Analisis Hasil Model
+### Model Performance Analysis
 
-- Model memiliki performa yang **sangat baik dalam memprediksi kelas Store dan Online**.
-- Performa pada kelas **Hybrid lebih rendah**, kemungkinan karena perilaku pelanggan yang merupakan kombinasi antara belanja online dan toko fisik.
-- Nilai **Weighted F1-score sebesar 0.96** menunjukkan performa model yang sangat baik secara keseluruhan.
+- The model performs **extremely well in predicting Store and Online classes**.
+- Performance on the **Hybrid class is lower**, likely because Hybrid customers exhibit mixed behavior between online and in-store shopping.
+- The **Weighted F1-score of 0.96** indicates strong overall classification performance.
+
 
 
 # 🧠 Analysis & Insights
 
-Berdasarkan hasil pemodelan dan interpretasi fitur menggunakan **SHAP (SHapley Additive exPlanations)**, ditemukan beberapa insight penting:
+Based on the modeling results and feature interpretation using **SHAP (SHapley Additive exPlanations)**, several key insights were identified.
 
-### 1️⃣ Digital Maturity
+### 1. Digital Maturity
 
-Fitur `tech_savvy_score` dan `daily_internet_hours` merupakan prediktor paling kuat dalam menentukan preferensi belanja pelanggan.
+Features such as `tech_savvy_score` and `daily_internet_hours` are among the strongest predictors of customer shopping preferences.
 
-Pelanggan dengan tingkat kemampuan teknologi rendah hampir tidak pernah diprediksi sebagai pelanggan **Online**.
+Customers with low technological familiarity are rarely predicted as **Online shoppers**.
 
----
 
-### 2️⃣ Hybrid Behavior Pattern
+### 2. Hybrid Behavior Pattern
 
-Pelanggan kategori **Hybrid** sangat sensitif terhadap `shipping_cost_sensitivity`.
+Customers in the **Hybrid** category are highly sensitive to `shipping_cost_sensitivity`.
 
-- Jika biaya pengiriman meningkat → pelanggan cenderung beralih ke **Offline**
-- Jika terdapat diskon → pelanggan tetap memilih **Online**
+- When shipping costs increase → customers tend to switch to **Offline shopping**
+- When discounts are offered → customers remain **Online shoppers**
 
-Hal ini menunjukkan bahwa pelanggan Hybrid sangat responsif terhadap strategi promosi.
+This suggests that Hybrid customers are highly responsive to promotional strategies.
 
----
 
-### 3️⃣ Income Influence
+### 3. Income Influence
 
-Fitur `monthly_income` menunjukkan bahwa pelanggan dengan pendapatan lebih tinggi memiliki kecenderungan lebih besar untuk menjadi **Hybrid shoppers**.
+The feature `monthly_income` indicates that customers with higher income levels are more likely to become **Hybrid shoppers**.
 
-Hal ini mencerminkan gaya hidup yang fleksibel antara kenyamanan belanja online dan pengalaman berbelanja secara langsung.
+This reflects a flexible lifestyle that balances the convenience of online shopping with the experience of visiting physical stores.
 
----
 
-### 4️⃣ Probabilistic Threshold
+### 4. Probabilistic Threshold
 
-Distribusi probabilitas prediksi menunjukkan bahwa kelas **Hybrid** memiliki batas klasifikasi yang lebih tipis dibandingkan dua kelas lainnya.
+Probability distribution analysis shows that the **Hybrid class has a thinner classification boundary** compared to the other classes.
 
-Oleh karena itu, pelanggan Hybrid memerlukan strategi pemasaran yang lebih spesifik untuk dapat dikonversi menjadi pelanggan **Online-first**.
-
----
+As a result, Hybrid customers require more targeted marketing strategies to convert them into **Online-first customers**.
